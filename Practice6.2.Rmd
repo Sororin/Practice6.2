@@ -1,0 +1,58 @@
+---
+title: "Practice6.2"
+author: "John Lin"
+date: "2023-10-24"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This is a homework made for Rclass :)
+
+```{r growth rate}
+grow<-function(species_1,species_2){  # start population -> species_1
+  num_gen<-30
+  N1 <- rep(0,num_gen)
+  N2 <- rep(0,num_gen)
+  generation<-1:num_gen
+  growth.rate<-1.2
+  K1<-100
+  K2<-120
+  a12<-0.8
+  a21<-0.8
+  N1[1]<-species_1
+  N2[1]<-species_2
+  for (i in 2:num_gen)  {
+    N1[i] = N1[i-1] + (growth.rate* N1[i-1] * ((K1-N1[i-1]-(a12*N2[i-1]))/K1))
+    N2[i] = N2[i-1] + (growth.rate * N2[i-1] * ((K2-N2[i-1]-(a21*N1[i-1]))/K2))
+  }
+  if (N1[1]>0){
+    if (N2[1]>0){
+      plot(N2~generation, type ="b", col=("red"), xlim=c(0,30), ylim=c(0,max(c(K1,K2))),ylab="N")
+      lines(N1~generation, type ="b")
+    } else if(N1[1]>0) {
+      plot(N1~generation, typ="b", xlim=c(0,30), ylim=c(0,max(c(K1,K2))), ylab="N")
+    }
+  }
+      else {
+    plot(N2~generation, typ="b", col=("red"), xlim=c(0,30), ylim=c(0,max(c(K1,K2))), ylab="N")
+  }
+}
+
+
+par(mar=c(5,5,0,1), mfrow=c(3,1),las=1)
+
+grow(1,0)
+text(4,90,"Species 1 alone")
+
+grow(0,1)
+text(4,90,"Species 2 alone")
+
+grow(1,1)
+text(6,110,"Both Species competing")
+
+
+```
+
